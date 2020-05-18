@@ -18,5 +18,10 @@ namespace BrightSide_appWpf
         public string Dizajn { get; set; }
         public string Obostrano { get; set; }
         public string Napomena { get; set; }
+        public int KupacId { get; set; }
+        public int ProizvodId { get; set; }
+        public int Boja { get; set; }
+        public int Velicina { get; set; }
+
     }
 }

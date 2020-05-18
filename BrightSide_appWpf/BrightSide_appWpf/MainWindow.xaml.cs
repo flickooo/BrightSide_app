@@ -15,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Excel = Microsoft.Office.Interop.Excel;
+
 
 namespace BrightSide_appWpf
 {
@@ -32,6 +32,8 @@ namespace BrightSide_appWpf
         List<Proizvod> listaComboBoxProzivodi = ProizvodDAL.vratiProizvod();
         List<Velicina> listaComboBoxVelicina = VelicinaDAL.vratiVelicine();
         List<Boja> listaComboBoxBoja = BojaDAL.vratiBoje();
+
+
         readonly List<string> listaComboBoxAtributi = new List<string> { "Ime", "Prezime", "Instagram" };
         readonly List<string> listaComboBoxPorudzbinaAtrubuti = new List<string> { "Ime", "Prezime", "DatumPorudzbine", "Instagram" };
 
@@ -328,6 +330,7 @@ namespace BrightSide_appWpf
             ListBoxTest.ItemsSource = KupacDAL.vratiKupca();
 
             DataGridPorudzbina.ItemsSource = PorudzbinaDAL.VratiPorudzbinu();
+            
         }
 
 
@@ -350,7 +353,7 @@ namespace BrightSide_appWpf
                 }
                 else
                 {
-                    datum = DatePickerSlanje.SelectedDate.Value.ToString("dd.MM.yyyy");
+                    datum = DatePickerSlanje.SelectedDate.Value.ToString("MM.dd.yyyy");
                 }
                 // Punim porudzbinu dohvacenim objektima, textboxovima itd
                 Porudzbina por = new Porudzbina
@@ -390,33 +393,7 @@ namespace BrightSide_appWpf
 
         private void ButtonExcel_Click(object sender, RoutedEventArgs e)
         {
-            //add this library
-
-            //Task.Run(() => {
-            //    // load excel, and create a new workbook
-            //    Excel.Application excelApp = new Excel.Application();
-            //    excelApp.Workbooks.Add();
-
-            //    // single worksheet
-            //    Excel._Worksheet workSheet = excelApp.ActiveSheet;
-
-            //    // column headings
-            //    for (int i = 0; i < DataGridPorudzbina.Columns.Count; i++)
-            //    {
-            //        workSheet.Cells[1, (i + 1)] = DataGridPorudzbina.Columns[i].ColumnName;
-            //    }
-
-            //    // rows
-            //    for (int i = 0; i < DataGridPorudzbina.Rows.Count; i++)
-            //    {
-            //        // to do: format datetime values before printing
-            //        for (int j = 0; j < DataGridPorudzbina.Columns.Count; j++)
-            //        {
-            //            workSheet.Cells[(i + 2), (j + 1)] = DataGridPorudzbina.Rows[i][j];
-            //        }
-            //    }
-            //    excelApp.Visible = true;
-            //});
+            
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -434,7 +411,54 @@ namespace BrightSide_appWpf
         //Porudzbina pretraga ne radi
         private void TextBoxPoruzbinaPretraga_TextChanged(object sender, TextChangedEventArgs e)
         {
-            DataGridPorudzbina.ItemsSource = PorudzbinaDAL.flitritanjePorudzbine(ComboBoxPorudzbinaPretraga.SelectedItem.ToString(), TextBoxPoruzbinaPretraga.Text);
+            if (ComboBoxPorudzbinaPretraga.SelectedIndex > -1)
+            {
+                DataGridPorudzbina.ItemsSource = PorudzbinaDAL.flitritanjePorudzbine(ComboBoxPorudzbinaPretraga.SelectedItem.ToString(), TextBoxPoruzbinaPretraga.Text);
+            }
+            
+            
+        }
+
+        private void DataGridPorudzbina_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DataGridPorudzbina.SelectedIndex > -1)
+            {
+                PorudzbinaView p = DataGridPorudzbina.SelectedItem as PorudzbinaView;
+                
+                //mora da se sredi u databazi indexi za kupce
+
+                ListBoxTest.SelectedIndex = p.KupacId-1;
+                
+                ComboBoxProizvod.SelectedIndex = p.ProizvodId -1;
+                ComboBoxBoja.SelectedIndex = p.Boja -1;
+                ComboBoxVelicina.SelectedIndex = p.Velicina -1;
+            }
+        }
+
+        private void DataGridPorudzbina_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            string headername = e.Column.Header.ToString();
+            if (headername == "KupacId")
+            {
+                e.Cancel = true;
+            }
+            if (headername == "ProizvodId")
+            {
+                e.Cancel = true;
+            }
+            if (headername == "Boja")
+            {
+                e.Cancel = true;
+            }
+            if (headername == "Velicina")
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void CloseWindow_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

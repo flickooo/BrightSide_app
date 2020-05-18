@@ -33,7 +33,7 @@ namespace BrightSide_appWpf
 
         public static List<PorudzbinaView> VratiPorudzbinu()
         {
-            string upit = @"SELECT k.Ime, k.Prezime, p.ImeProizvoda , b.BojaNaziv , v.VelicinaNaziv , DatumPorudzbine , DatumSlanja, Dizajn , o.Obostrano , Napomena
+            string upit = @"SELECT k.Ime, k.Prezime, p.ImeProizvoda , b.BojaNaziv , v.VelicinaNaziv , DatumPorudzbine , DatumSlanja, Dizajn , o.Obostrano , Napomena, por.KupacId, por.ProizvodId, por.Boja, por.Velicina
                             FROM Porudzbina as por
                             INNER JOIN Proizvod as p
                             ON por.ProizvodId = p.ProizvodId
@@ -83,7 +83,7 @@ namespace BrightSide_appWpf
 
         public static List<PorudzbinaView> flitritanjePorudzbine(string atribut, string pretraga)
         {
-            string upit = $@"SELECT k.Ime, k.Prezime, p.ImeProizvoda , b.BojaNaziv , v.VelicinaNaziv , DatumPorudzbine , DatumSlanja, Dizajn , o.Obostrano , Napomena
+            string upit = $@"SELECT k.Ime, k.Prezime, p.ImeProizvoda , b.BojaNaziv , v.VelicinaNaziv , DatumPorudzbine , DatumSlanja, Dizajn , o.Obostrano , Napomena, por.KupacId
                             FROM Porudzbina as por
                             INNER JOIN Proizvod as p
                             ON por.ProizvodId = p.ProizvodId
